@@ -3,69 +3,123 @@
 <head>
 <meta charset="UTF-8">
 <title>Important Question 💖</title>
+
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        background: #ffe6f0;
-        overflow: hidden;
-    }
+body {
+    margin: 0;
+    font-family: 'Comic Sans MS', cursive;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    text-align: center;
+}
 
-    h1 {
-        margin-top: 100px;
-        color: #ff4d88;
-    }
+/* Floating hearts */
+.heart {
+    position: fixed;
+    bottom: -20px;
+    color: red;
+    font-size: 20px;
+    animation: floatUp 5s linear infinite;
+}
 
-    button {
-        padding: 12px 20px;
-        font-size: 16px;
-        margin: 10px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        position: absolute;
+@keyframes floatUp {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
     }
+    100% {
+        transform: translateY(-100vh);
+        opacity: 0;
+    }
+}
 
-    #yesBtn {
-        background-color: #ff6666;
-        color: white;
-        left: 40%;
-        top: 50%;
-    }
+h1 {
+    margin-top: 120px;
+    color: white;
+    font-size: 32px;
+}
 
-    #noBtn {
-        background-color: #4CAF50;
-        color: white;
-        left: 55%;
-        top: 50%;
-    }
+/* Buttons */
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    position: absolute;
+    transition: all 0.3s ease;
+}
 
-    .boom {
-        font-size: 50px;
-        animation: explode 0.6s ease-out;
-    }
+#yesBtn {
+    background-color: #ff4d6d;
+    color: white;
+    left: 40%;
+    top: 55%;
+}
 
-    @keyframes explode {
-        0% { transform: scale(1); }
-        100% { transform: scale(3); opacity: 0; }
-    }
+#noBtn {
+    background-color: #28a745;
+    color: white;
+    left: 55%;
+    top: 55%;
+}
+
+/* Explosion */
+.boom {
+    font-size: 60px;
+    animation: explode 0.7s ease-out;
+}
+
+@keyframes explode {
+    0% { transform: scale(1); }
+    100% { transform: scale(4); opacity: 0; }
+}
 </style>
+
 </head>
 <body>
 
-<h1 id="question">Do you wanna breakup? 💔</h1>
+<h1 id="question"></h1>
 
 <button id="yesBtn">Yes 😢</button>
 <button id="noBtn">No ❤️</button>
 
 <script>
+// ===== Typing effect =====
+const text = "Do you wanna breakup? 💔";
+let i = 0;
+function typeWriter() {
+    if (i < text.length) {
+        document.getElementById("question").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeWriter, 50);
+    }
+}
+typeWriter();
+
+// ===== Floating hearts =====
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (15 + Math.random() * 20) + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 5000);
+}
+setInterval(createHeart, 300);
+
+// ===== Button logic =====
 let yesClickCount = 0;
 
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const question = document.getElementById("question");
 
-// YES BUTTON LOGIC (runs away)
+// YES button escapes
 yesBtn.addEventListener("click", () => {
     yesClickCount++;
 
@@ -77,20 +131,20 @@ yesBtn.addEventListener("click", () => {
         yesBtn.style.top = y + "px";
     } 
     else if (yesClickCount === 7) {
-        question.innerText = "Sorry, this option is invalid 😌 Wanna click me again?";
+        question.innerHTML = "Sorry, this option is invalid 😌 Wanna click me again?";
     } 
     else {
-        question.innerText = "Sorry, you are mine 💖";
+        question.innerHTML = "Sorry, you are mine 💖";
         yesBtn.style.display = "none";
         noBtn.style.display = "none";
     }
 });
 
-// NO BUTTON LOGIC (boom 💣)
+// NO button = explosion
 noBtn.addEventListener("click", () => {
     document.body.innerHTML = `
         <h1 class="boom">💣 BOOM 💣</h1>
-        <h1>You are mine ❤️</h1>
+        <h1 style="color:white;">You are mine ❤️</h1>
     `;
 });
 </script>
